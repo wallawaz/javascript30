@@ -10,7 +10,47 @@
   </div>
 
 <script>
+
+  //can use behind the scenes to trigger function when keywoards are heard.
+  //`what is the weather` => trigger getWeather();
+
+  //chrome or Firefox
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+
+  recognition.interimResults = true;  // live updates of recognition
+
+  let p = document.createElement('p');
+  const words = document.querySelector('.words');
+
+  //appendChild -> append a <p> inside the words div.
+  words.appendChild(p);
+
+
+  recognition.addEventListener('result', e => {
+
+    const transcript = Array.from(e.results)
+      .map(res => res[0])
+      .map(res => res.transcript)
+      .join('');
+
+    //keep building into p
+    p.textContent = transcript;
+
+    //once done . . . ie. there is a pause.
+    //add a new <p> so we don't keep overwriting.
+    if (e.results[0].isFinal) {
+      p = document.createElement('p');
+      words.appendChild(p);
+    }
+
+  });
+
+  //when finished.. start again.
+  recognition.addEventListener('end', recognition.start);
+
+  recognition.start();
+
 
 
 </script>

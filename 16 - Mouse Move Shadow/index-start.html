@@ -31,6 +31,42 @@
   </style>
 
 <script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 100;
+
+  function shadow(e) {
+    //const width = hero.offsetWidth;
+    //const height = hero.offsetHeight;
+    //or:
+    const { offsetWidth: width, offsetHeight: height} = hero;
+    let { offsetX: x, offsetY: y } = e;
+    //console.log(x, y);
+
+    //this === element you listened on.
+    //e.target === element that fired the event.
+    //this will always be hero because we are listening on hero.
+    //target can change if there is a child of hero (h1)
+    if (this !== e.target) {
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    }
+
+    //how far shoudl the text shadow go?
+    const xWalk = (x / width * walk) - (walk/2);
+    const yWalk = (y / height * walk) - (walk/2);
+
+
+    console.log(xWalk,yWalk);
+
+    //textShadow = '10px 10px 0 rgba(0,0,0)'
+    text.style.textShadow = `${xWalk}px ${yWalk}px 0 rgba(255,0,255,0.7)`;
+
+
+  }
+
+  hero.addEventListener('mousemove', shadow);
+
 </script>
 </body>
 </html>

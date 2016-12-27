@@ -27,6 +27,38 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+    // all links
+    const triggers = document.querySelectorAll('a');
+
+    //create a blank span element with class highlight.
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+
+    //will be invisible because does not have width or height.
+    document.body.append(highlight);
+
+    function highlightLink() {
+      //console.log('add highlight!');
+      const linkCoords = this.getBoundingClientRect();
+
+      //needed because of scrolling offset
+      const coords = {
+        width: linkCoords.width,
+        height: linkCoords.height,
+        top: linkCoords.top + window.scrollY,
+        left: linkCoords.left + window.scrollX
+      };
+      
+      highlight.style.width = `${coords.width}px`; //set white shadow width
+      highlight.style.height = `${coords.height}px`; //set white shadow height
+
+      highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`
+    }
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener('mouseenter', highlightLink);
+    });
+
   </script>
 </body>
 </html>

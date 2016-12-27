@@ -28,7 +28,7 @@
     background: thistle;
   }
 
-  .two {
+  .two { 
     background:mistyrose;
   }
 
@@ -37,8 +37,31 @@
   }
 </style>
 
-<button></button>
+<button class="specialButton"></button>
 <script>
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('.specialButton');
+  function logText(e) {
+    console.log(this.classList.value);
+    //e.stopPropagation();                //do not bubble up.
+  }
+
+
+  //since divs are embedded under eachother.
+  //if you click on div3; div2 and div1 will be returned as well.
+  //BUBBLING.
+
+  /*
+    trickle down, bubble up
+  */
+
+  //when capture = false; inner most elements handled first then outer.
+  //when capture = true;  outer most elements handled first then the inner.
+  divs.forEach(div => div.addEventListener('click', logText, {
+    capture: false
+  }));
+
+  button.addEventListener('click', () => alert('only allowed to clicked once!'), {once: true});
 
 </script>
 </body>

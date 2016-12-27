@@ -22,13 +22,71 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
+      <input type="button" name="clear" value="Clear All">
     </form>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+
+  //const items = JSON.parse(localStorage.getItem('items'));
+  const itemsInStorage = localStorage.getItem('items');
+  const items = itemsInStorage.length > 3 ? JSON.parse(itemsInStorage) : [];
+
+
+  function addItem(e) {
+    e.preventDefault() //prevent event from reloading the page.
+    const text = (this.querySelector('[name=item]')).value;
+
+    const item = {
+      text, //ES6 shortuct for `text: text`
+      done: false
+    }
+    this.reset(); // this === the form.
+    items.push(item);
+    populateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items)); //items need to be strings.
+    
+  }
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked': ''} />
+          <label for="item${i}">${plate.text}</label>
+
+        <li>
+      `;
+    }).join('');
+  }
+
+  function toggleDone(e) {
+    //console.log(e.target); //get the target of the event.
+    if (!e.target.matches('input')) return;
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
+  function clearAll() {
+    console.log('clear!');
+    items.length = 0;
+    JSON.stringify(localStorage.setItem('items', items));
+    addItems.reset();
+    populateList(items, itemsList);
+  }
+
+  populateList(items, itemsList);
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+
+  const clearButton = addItems.querySelector('[name=clear]');
+  clearButton.addEventListener('click', clearAll);
+
+  populateList(items, itemsList);
 
 </script>
 

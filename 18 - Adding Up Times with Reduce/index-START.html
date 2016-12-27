@@ -182,6 +182,17 @@
     </li>
 
 <script>
+  const videos = document.querySelector('.videos');
+  const times = [...videos.querySelectorAll('li')];
+
+  const total = times.reduce((obj, item) => {
+      [mins, secs] = item.dataset.time.split(':');
+      obj['seconds'] += parseInt(secs);
+      obj['seconds'] += parseInt(mins) * 60;
+      
+      return obj;
+    }, {'seconds': 0}); // again initalizing an empty object to be returned.
+
 </script>
 </body>
 </html>

@@ -33,28 +33,90 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    const _1500s = inventors.filter(function(inventor) {
+      if (inventor.year >= 1500 && inventor.year < 1600) {
+        return true;
+      }
+    });
+
+    // lets rewrite with arrow function.
+    const fifteenHundreds = inventors.filter(inventor => inventor.year >= 1500 && inventor.year < 1600 );
+
+    //to view in nice table format.
+    console.table(fifteenHundreds);
+    
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    const names = inventors.map(inventor => [inventor.first, inventor.last]); 
+
+    // or using `` format.
+    const names2 = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    const inventorsSort = inventors.sort(function(a, b) {
+      if (a.year > b.year) {
+        return 1
+      } else { return -1 }
+    });
+
+    const inventorSort2 = inventors.sort((a, b) => a.year > b.year ? 1: -1);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    // starts with (a, b); where a = running total; b = each element.
+
+    const totalYears = inventors.reduce((total, inventor) => {
+      return total + (inventor.passed - inventor.year);
+    }, 0);  // need to initialize total to 0.
+
 
     // 5. Sort the inventors by years lived
+    const inventorsSortYearsLived = inventors.sort(function(a, b){
+      const firstInv = a.passed - a.year;
+      const secondInv = b.passed - b.year;
+      return secondInv > firstInv ? -1: 1;
+
+    })
+    inventorsSortYearsLived.forEach(i => {
+      console.log(i.passed - i.year);
+    });
+
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    const category = document.querySelector('.mw-category');
+
+    // use the spread operator `...` to make the returned node-list an array.
+    // const links = [...category.querySelectorAll('a')];
+    //const linksText = links.map(link => link.textContent);
+    //const de = linksText.filter(link => link.match(' de '));
 
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    const peopleSorted = people.sort((p1, p2) => {
+      const [ln1, fn1] = p1.split(",");
+      const [ln2, fn2] = p2.split(",");
+      return ln1 > ln2 ? 1: -1;
+    });
+
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+
+    const transportation = data.reduce((obj, item) => {
+      if (!obj[item]) { //if we have not seen this item yet.
+        obj[item] = 0;  //add the item as a key in obj with count of 0. 
+      }
+
+      obj[item]++;
+
+      return obj;
+    }, {}); // again initalizing an empty object to be returned.
+
 
   </script>
 </body>

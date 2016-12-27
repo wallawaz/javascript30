@@ -7,6 +7,38 @@
 </head>
 <body>
 <script>
+    const u = 'ArrowUp';
+    const d = 'ArrowDown';
+    const l = 'ArrowLeft';
+    const r = 'ArrowRight';
+    const a = 'a';
+    const b = 'b';
+    const code = [u,u,d,d,l,r,l,r,a,b,a];
+
+    function cornify() {
+        cornify_add();
+        return false;
+    }
+    let keyPos = 0;
+
+    function konamiCode(e) {
+        const key = code[keyPos];
+        console.log(key);
+
+        if (key != e.key) {
+            keyPos = 0;
+            return;
+        }
+        else {
+            keyPos++;
+            if(keyPos === code.length - 1) {
+                cornify();
+                keyPos = 0;
+            }
+        }        
+    }
+    document.addEventListener('keydown', konamiCode);
+
 </script>
 </body>
 </html>

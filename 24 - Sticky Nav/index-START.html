@@ -54,6 +54,29 @@
   </div>
 
 <script>
+  const nav = document.querySelector('#main');
+
+  //grab the top of the nav to determine when we've scrolled passed it.
+  const topOfNav = nav.offsetTop;
+
+  console.dir(topOfNav);
+
+  function fixNav() {
+
+    //console.log(this.scrollY);
+    const fn = 'fixed-nav';
+    if (this.scrollY >= topOfNav) {
+
+      //padding is needed so the nav does not jump!
+      document.body.style.paddingTop = nav.offsetHeight + 'px';
+      document.body.classList.add(fn);
+      
+    } else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove(fn);
+    }
+  }
+  window.addEventListener('scroll', fixNav);
 
 </script>
 

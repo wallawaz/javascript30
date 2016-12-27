@@ -37,6 +37,58 @@
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
 
+  let lastHole;
+  let timeUp = false;
+
+  function randTime(min, max) {
+    // how long the mole will pop its head out.
+    const timeUp = Math.random() * (max-min) + min;
+    return timeUp;
+  }
+
+  function randomHole(holes) {
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx];
+    if (hole === lastHole) {
+      return randomHole(holes); //recursive
+    }
+    lastHole = hole;
+    return hole;
+  }
+
+  function startGame() {
+    scoreBoard.textContent = 0;
+    timeUp = false;
+    peep();
+    setTimeout(() => {timeUp=true}, 10000);
+  }
+
+  function peep() {
+    const time = randTime(200, 1000); //between 200milliseconds & 1second.
+    const hole = randomHole(holes);
+
+    hole.classList.add('up');
+
+    setTimeout(() => {
+      hole.classList.remove('up');
+      if (!timeUp) {
+        peep();
+      }
+    }, time);
+
+  }
+
+  function whack(e) {
+    if (!e.isTrusted) return; //not a `real` click
+
+    const score = parseInt(scoreBoard.textContent);
+    scoreBoard.textContent = score + 1;
+
+    this.classList.remove('up'); //we hit the mole. move him down.  
+  }
+
+  moles.forEach(mole => mole.addEventListener('click', whack));
+
 </script>
 </body>
 </html>

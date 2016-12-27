@@ -104,6 +104,42 @@
   </div>
 
 <script>
+
+  function handleCheck(e) {
+    console.log(e);
+    if (lastChecked && e.shiftKey) {
+
+      const checkboxArray = [...document.querySelectorAll('.inbox input[type="checkbox"')];
+
+      // get index of lastChecked
+      const lastCheckedIndex = checkboxArray.findIndex(checkbox => checkbox === lastChecked);
+      const lastCheckedValue = checkboxArray[lastCheckedIndex].checked;
+
+      // index of `this` checkox.
+      const thisIndex = checkboxArray.findIndex(checkbox => checkbox === this);
+
+      checkboxArray.forEach(cb => {
+        const i = checkboxArray.findIndex(checkbox => checkbox == cb);
+        if (i < thisIndex && i > lastCheckedIndex && lastCheckedValue) {
+
+          // this element is between `lastChecked` & `thisChecked`
+          console.dir(cb);
+          cb.checked = true;
+        }
+      });
+
+    } else {
+      lastChecked = this;
+    }
+  }
+
+  //grab all checkboxes.
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"');
+
+  let lastChecked;
+
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));  //click will fire even when checkbox is checked w/ keyboard.
+
 </script>
 </body>
 </html>

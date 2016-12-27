@@ -126,15 +126,20 @@
     display: none;
   }
 
+  /*white background to pop-in*/
+  .dropdown.open {
+    opacity: 1;
+  }
+
+  /*first remove the none*/
   .trigger-enter .dropdown {
     display: block;
   }
 
+  /*next give opacity*/
   .trigger-enter-active .dropdown {
     opacity: 1;
   }
-
-
 
   .dropdownBackground {
     width:100px;
@@ -208,6 +213,54 @@
 </style>
 
 <script>
+  const triggers = document.querySelectorAll('.cool > li');
+  const background = document.querySelector('.dropdownBackground');
+  const nav = document.querySelector('.top');
+
+  function handleEnter(e) {
+    console.log('entered');
+    this.classList.add('trigger-enter');
+
+    //when you enter into a function the value of `this` changes.
+    //if you enter into a => function then `this` is inherited from parent.
+    setTimeout(() => {
+      if (this.classList.contains('trigger-enter')) {
+        this.classList.add('trigger-enter-active')
+      }
+    }, 150);
+
+    background.classList.add('open');
+
+    //the one dropdown that got hovered.
+    const dropdown = this.querySelector('.dropdown');
+    const dropdownCoords = dropdown.getBoundingClientRect();
+
+    //can't assume that the nav will always remain static;
+    const navCoords = nav.getBoundingClientRect();
+
+    const coords = {
+      height: dropdownCoords.height,
+      width: dropdownCoords.width,
+      top: dropdownCoords.top - navCoords.top,
+      left: dropdownCoords.left - navCoords.left
+    }
+
+    background.style.setProperty('width', `${coords.width}px`);
+    background.style.setProperty('height', `${coords.height}px`);
+    background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`);
+
+
+    console.log(dropdownCoords);
+  }
+
+  function handleLeave() {
+    this.classList.remove('trigger-enter', 'trigger-enter-active');
+    background.classList.remove('open');
+
+  }
+  triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter));
+  triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave));
+
 </script>
 
 </body>
